@@ -1,0 +1,8 @@
+### Update patient
+PUT http://localhost:8081/api/patients/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "email": "johndoe1@gmail.com",
+  "dateOfBirth": "2004-02-10"
+}
