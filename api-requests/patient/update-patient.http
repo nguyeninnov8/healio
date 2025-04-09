@@ -3,6 +3,8 @@ PUT http://localhost:8081/api/patients/123e4567-e89b-12d3-a456-426614174000
 Content-Type: application/json
 
 {
-  "email": "johndoe1@gmail.com",
-  "dateOfBirth": "2004-02-10"
+  "name": "John Doe",
+  "address": "123 Main",
+  "dateOfBirth": "2004-02-10",
+  "email": "lenguyen1002@gmail.com"
 }
