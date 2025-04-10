@@ -4,10 +4,10 @@ POST http://localhost:8081/api/patients
 Content-Type: application/json
 
 {
-  "name": "John Doe",
+  "name": "John Doe With Billing Account 1",
   "address": "123 Main",
   "dateOfBirth": "2004-02-10",
-  "email": "example@gmail.com"
+  "email": "example_billinggg2456@gmail.com"
 }
 
 ###
