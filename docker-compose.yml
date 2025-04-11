@@ -1,5 +1,3 @@
-version: "3.0"
-
 services:
   patient-service:
     image: patient-service:latest
@@ -33,6 +31,21 @@ services:
       - "9002:9002"
     networks:
       - internal
+
+  analytics-service:
+    image: analytics-service:latest
+    build:
+      context: ./analytics-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - internal
+    depends_on:
+      - patient-service
+      - billing-service
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
   patient-service-db:
     image: postgres:14

@@ -5,7 +5,7 @@ spring:
     bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
       properties:
         spring.json.trusted.packages: "*"
         security.protocol: PLAINTEXT
@@ -13,10 +13,8 @@ spring:
       group-id: patient-service-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "*"
-        security.protocol: PLAINTEXT
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      security.protocol: PLAINTEXT
 #  h2:
 #    console:
 #      path: /h2-console
