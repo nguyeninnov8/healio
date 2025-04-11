@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: analytics-service
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+server:
+  port: 8083
