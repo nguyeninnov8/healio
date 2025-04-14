@@ -39,13 +39,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
+    depends_on:
+      kafka:
+        condition: service_healthy
     networks:
       - internal
-    depends_on:
-      - patient-service
-      - billing-service
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_KAFKA_PROPERTIES_REQUEST_TIMEOUT_MS: 20000
+      SPRING_KAFKA_PROPERTIES_MAX_BLOCK_MS: 15000
+      SPRING_KAFKA_LISTENER_MISSING_TOPICS_FATAL: false
 
   patient-service-db:
     image: postgres:14
@@ -61,20 +64,42 @@ services:
       - internal
 
   kafka:
-    image: bitnami/kafka:latest
+    image: confluentinc/cp-kafka:7.4.0
     ports:
       - "9092:9092"
       - "9094:9094"
     environment:
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-      KAFKA_CFG_NODE_ID: 0
-      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9094
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     networks:
       - internal
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: [ "CMD-SHELL", "kafka-topics --bootstrap-server kafka:9092 --list || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - internal
+    healthcheck:
+        test: [ "CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok" ]
+        interval: 10s
+        timeout: 5s
+        retries: 5
 
 networks:
   internal:
