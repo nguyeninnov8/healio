@@ -4,10 +4,10 @@ POST http://localhost:8081/api/patients
 Content-Type: application/json
 
 {
-  "name": "John Doe With Billing Account 1",
+  "name": "John Doe With Billing Account Kafka 1",
   "address": "123 Main",
   "dateOfBirth": "2004-02-10",
-  "email": "example_billinggg24562227@gmail.com"
+  "email": "hello1422@gmail.com"
 }
 
 ###

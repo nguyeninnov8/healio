@@ -1,11 +1,19 @@
 spring:
   application:
     name: analytics-service
-
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9094
     consumer:
+      group-id: analytics-service-group
+      auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+    listener:
+      missing-topics-fatal: false
+    properties:
+      request.timeout.ms: 10000
+      reconnect.backoff.ms: 1000
+      retry.backoff.ms: 1000
 server:
   port: 8083
+

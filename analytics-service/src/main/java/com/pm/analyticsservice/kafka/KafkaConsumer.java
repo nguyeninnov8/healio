@@ -1,18 +1,17 @@
 package com.pm.analyticsservice.kafka;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import patient.event.PatientEvent;
 
+@Slf4j
 @Service
 public class KafkaConsumer {
 
-    private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
 
-    @KafkaListener(topics = "patient", groupId = "analytics-service")
+    @KafkaListener(topics = "patient", groupId = "analytics-service-group")
     public void consumeEvent(byte[] event) {
         // Deserialize the event
         try {
@@ -25,6 +24,7 @@ public class KafkaConsumer {
                     patientEvent.getName(),
                     patientEvent.getEmail(),
                     patientEvent.getEventType());
+
         } catch (InvalidProtocolBufferException e) {
             log.error("event={}", e);
             log.error("Error while deserializing event: {}", e.getMessage());
