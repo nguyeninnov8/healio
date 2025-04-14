@@ -101,6 +101,18 @@ services:
         timeout: 5s
         retries: 5
 
+  api-gateway:
+    image: api-gateway:latest
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - internal
+    depends_on:
+      - patient-service
+
 networks:
   internal:
     driver: bridge

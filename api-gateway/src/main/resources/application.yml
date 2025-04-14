@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: patient-service
+          uri: http://patient-service:8081
+          predicates:
+            - Path=/api/patients/**
+          filters:
+            - RewritePath=/api/patients/(?<segment>.*), /api/patients/$\{segment}
+server:
+  port: 8080
