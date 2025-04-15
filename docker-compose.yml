@@ -20,6 +20,7 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_SQL_INIT_MODE: always
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
 
   billing-service:
     image: billing-service:latest
@@ -108,10 +109,22 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
       - internal
     depends_on:
       - patient-service
+
+  eureka-server:
+    image: eureka-server:latest
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - internal
 
 networks:
   internal:
