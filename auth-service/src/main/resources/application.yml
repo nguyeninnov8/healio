@@ -6,4 +6,4 @@ server:
   port: 8084
 
 app:
-  jwtSecret: thisIsASecretKey
+  jwtSecret: dasmdnasmzxbhjkzxcvbjkxcbjkvzxhcjkvhzxjkcvbjzxcvbjkzxcbvjmzxcbjkvhbzxcjkvbzxjkcvb

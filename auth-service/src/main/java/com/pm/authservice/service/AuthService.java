@@ -25,8 +25,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
-    private AuthenticationManager authenticationManager;
-    private final PasswordEncoder encoder;
+    private final AuthenticationManager authenticationManager;
 
     public Optional<LoginResponseDTO> authenticate(LoginRequestDTO loginRequestDTO) {
         Authentication authentication = authenticationManager.authenticate(

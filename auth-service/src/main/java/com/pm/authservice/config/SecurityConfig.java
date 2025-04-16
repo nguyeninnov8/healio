@@ -32,6 +32,7 @@ public class SecurityConfig {
     private final CustomUserDetailService customUserDetailService;
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
+
     @Bean
     public JwtTokenFilter jwtTokenFilter() {
         return new JwtTokenFilter();
