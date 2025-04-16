@@ -51,6 +51,25 @@ services:
       SPRING_KAFKA_PROPERTIES_MAX_BLOCK_MS: 15000
       SPRING_KAFKA_LISTENER_MISSING_TOPICS_FATAL: false
 
+  auth-service:
+    image: auth-service:latest
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - internal
+    depends_on:
+      - auth-service-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-service-db:5432/db
+      SPRING_DATASOURCE_USERNAME: admin_user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_SQL_INIT_MODE: always
+      APP_JWT_SECRET: Raa6wMrw39oUxc6Q1lPemEeGHrLtsiKK
+
   patient-service-db:
     image: postgres:14
     environment:
@@ -61,6 +80,19 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  auth-service-db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: admin_user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth_postgres_data:/var/lib/postgresql/data
     networks:
       - internal
 
@@ -132,3 +164,4 @@ networks:
 
 volumes:
   postgres_data:
+  auth_postgres_data:
