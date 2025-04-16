@@ -1,0 +1,9 @@
+### register a user
+POST http://localhost:8084/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "rn100204@gmail.com",
+  "password": "123456789",
+  "role": "ROLE_USER"
+}

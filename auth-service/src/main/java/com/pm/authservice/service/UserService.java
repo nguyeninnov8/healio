@@ -15,4 +15,12 @@ public class UserService {
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public boolean save(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return false; // User already exists
+        }
+        userRepository.save(user);
+        return true; // User saved successfully
+    }
 }
