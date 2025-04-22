@@ -1,0 +1,45 @@
+# auth-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: auth-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://auth-service-db:5432/db
+            - name: SPRING_DATASOURCE_USERNAME
+              value: admin_user
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: update
+            - name: SPRING_SQL_INIT_MODE
+              value: always
+            - name: APP_JWT_SECRET
+              value: dasmdnasmzxbhjkzxcvbjkxcbjkvzxhcjkvhzxjkcvbjzxcvbjkzxcbvjmzxcbjkvhbzxcjkvbzxjkcvb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - port: 8084
+      targetPort: 8084
